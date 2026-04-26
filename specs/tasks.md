@@ -4,7 +4,7 @@ Based on `specs/requirements.md` and `specs/design.md`.
 
 ## Phase 1: Project Setup and Infrastructure
 - [x] **Task 1:** Initialize the monorepo structure (app, server, ai-bot, specs, infrastructure directories) and configure base tooling (linters, formatters) for code quality.
-- [ ] **Task 2:** Setup Google Cloud Platform (GCP) infrastructure using Terraform. This includes provisioning Cloud Run, Firestore, Cloud SQL, and enabling necessary APIs (Civic Information, Maps, Translation, Dialogflow, Vertex AI).
+- [x] **Task 2:** Setup Google Cloud Platform (GCP) infrastructure using Terraform. This includes provisioning Cloud Run, Firestore, Cloud SQL, and enabling necessary APIs (Civic Information, Maps, Translation, Dialogflow, Vertex AI).
 - [ ] **Task 3:** Establish CI/CD pipelines for automated testing, linting, and deployment of both frontend (app) and backend (server) services to GCP.
 
 ## Phase 2: Backend Development (Node.js/Cloud Run)
