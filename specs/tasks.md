@@ -22,4 +22,4 @@ Based on `specs/requirements.md` and `specs/design.md`.
 
 ## Phase 5: Localization and Polish
 - [x] **Task 13:** Integrate the Google Cloud Translation API to provide seamless, dynamic multilingual support across the entire frontend application and AI chat responses.
-- [ ] **Task 14:** Conduct comprehensive automated end-to-end testing, accessibility audits, and security reviews (focusing on the complete absence of PII storage) before initial deployment.
+- [x] **Task 14:** Conduct comprehensive automated end-to-end testing, accessibility audits, and security reviews (focusing on the complete absence of PII storage) before initial deployment.
