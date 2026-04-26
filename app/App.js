@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import LocatorScreen from './src/screens/LocatorScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
+import { TranslationProvider } from './src/context/TranslationContext';
 import { theme } from './src/theme';
 
 const Stack = createNativeStackNavigator();
@@ -25,8 +26,9 @@ const AppTheme = {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={AppTheme}>
-        <Stack.Navigator
+      <TranslationProvider>
+        <NavigationContainer theme={AppTheme}>
+          <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
             headerStyle: { backgroundColor: theme.colors.surface },
@@ -56,6 +58,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </TranslationProvider>
     </SafeAreaProvider>
   );
 }

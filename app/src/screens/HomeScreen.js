@@ -2,8 +2,10 @@ import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { AccessibleText, AccessibleButton } from '../components/AccessibleWrapper';
 import { theme } from '../theme';
+import { useTranslation, LANGUAGES } from '../context/TranslationContext';
 
 export default function HomeScreen({ navigation }) {
+  const { locale, changeLanguage } = useTranslation();
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <AccessibleText variant="header" style={styles.header}>
@@ -13,6 +15,18 @@ export default function HomeScreen({ navigation }) {
       <AccessibleText variant="body" style={styles.body}>
         We are here to help you understand the election process, check your eligibility, and find your local polling place. Let's get started.
       </AccessibleText>
+
+      <View style={styles.langContainer}>
+         {LANGUAGES.map(lang => (
+           <AccessibleButton
+              key={lang.code}
+              title={lang.code.toUpperCase()}
+              variant={locale === lang.code ? 'primary' : 'secondary'}
+              onPress={() => changeLanguage(lang.code)}
+              accessibilityLabel={`Change Language to ${lang.label}`}
+           />
+         ))}
+      </View>
 
       <View style={styles.buttonContainer}>
         <AccessibleButton
@@ -61,7 +75,14 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   body: {
-    marginBottom: theme.spacing.xl * 1.5,
+    marginBottom: theme.spacing.md,
+  },
+  langContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.xl,
+    flexWrap: 'wrap',
   },
   buttonContainer: {
     gap: theme.spacing.md,

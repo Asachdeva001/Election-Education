@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, AccessibilityInfo } from 'react-native';
 import { theme } from '../theme';
+import { useTranslation } from '../context/TranslationContext';
 
 /**
  * Universal accessible wrapper enforcing WCAG 2.1 AA standards for buttons/touchables.
@@ -49,6 +50,24 @@ export const AccessibleText = ({
     accessibilityRole = 'text',
     importantForAccessibility = 'auto'
 }) => {
+  const { translate, locale } = useTranslation();
+  const [displayText, setDisplayText] = useState(children);
+
+  useEffect(() => {
+    let isMounted = true;
+    const updateText = async () => {
+      if (typeof children === 'string') {
+        const res = await translate(children);
+        if (isMounted) setDisplayText(res);
+      } else {
+        if (isMounted) setDisplayText(children);
+      }
+    };
+    // Ensure translation re-triggers if locale or text specifically changes
+    updateText();
+    return () => { isMounted = false; };
+  }, [children, locale, translate]);
+
   return (
     <Text 
       style={[styles.baseText, theme.typography[variant], style]}
@@ -56,7 +75,7 @@ export const AccessibleText = ({
       accessibilityRole={accessibilityRole}
       importantForAccessibility={importantForAccessibility}
     >
-      {children}
+      {displayText}
     </Text>
   );
 };

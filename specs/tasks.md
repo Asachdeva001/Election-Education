@@ -21,5 +21,5 @@ Based on `specs/requirements.md` and `specs/design.md`.
 - [x] **Task 12:** Build the Dynamic Timelines view with personalized calendars, "Add to Google Calendar" functionality, and notification preferences.
 
 ## Phase 5: Localization and Polish
-- [ ] **Task 13:** Integrate the Google Cloud Translation API to provide seamless, dynamic multilingual support across the entire frontend application and AI chat responses.
+- [x] **Task 13:** Integrate the Google Cloud Translation API to provide seamless, dynamic multilingual support across the entire frontend application and AI chat responses.
 - [ ] **Task 14:** Conduct comprehensive automated end-to-end testing, accessibility audits, and security reviews (focusing on the complete absence of PII storage) before initial deployment.
