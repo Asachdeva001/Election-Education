@@ -1,0 +1,46 @@
+name: CD - Backend
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - 'server/**'
+      - '.github/workflows/cd-backend.yml'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_NAME: election-backend-api
+  REGION: us-central1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'Configure Docker'
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+
+    - name: 'Build and Push Docker Image'
+      run: |
+        IMAGE="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/election-repo/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+        docker build -t $IMAGE ./server
+        docker push $IMAGE
+
+    - name: 'Deploy to Cloud Run'
+      uses: 'google-github-actions/deploy-cloudrun@v2'
+      with:
+        service: '${{ env.SERVICE_NAME }}'
+        region: '${{ env.REGION }}'
+        image: 'us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/election-repo/${{ env.SERVICE_NAME }}:${{ github.sha }}'
