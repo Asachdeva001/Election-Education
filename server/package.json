@@ -10,10 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^8.5.0",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg": "^8.20.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",

@@ -9,7 +9,7 @@ Based on `specs/requirements.md` and `specs/design.md`.
 
 ## Phase 2: Backend Development (Node.js/Cloud Run)
 - [x] **Task 4:** Develop the `services/` layer in the backend to securely integrate with the Google Civic Information API for voter data, polling places, and local election timelines.
-- [ ] **Task 5:** Implement REST API routes and controllers in the backend to serve sanitized (zero-PII) information to the frontend application, incorporating data fetching and caching strategies with Cloud SQL and Firestore.
+- [x] **Task 5:** Implement REST API routes and controllers in the backend to serve sanitized (zero-PII) information to the frontend application, incorporating data fetching and caching strategies with Cloud SQL and Firestore.
 - [ ] **Task 6:** Set up Firebase Cloud Messaging (FCM) on the backend for triggering personalized, location-based notifications and reminders for registration and voting deadlines.
 
 ## Phase 3: AI & NLP Integration (Dialogflow/Vertex AI)
