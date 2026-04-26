@@ -35,6 +35,13 @@ export default function HomeScreen({ navigation }) {
           variant="secondary"
           onPress={() => console.log('Navigate to NLP FAQ')}
         />
+
+        <AccessibleButton
+          title="View My Timelines"
+          accessibilityLabel="See your personalized election deadlines and calendar"
+          variant="secondary"
+          onPress={() => navigation.navigate('Timeline')}
+        />
       </View>
     </ScrollView>
   );

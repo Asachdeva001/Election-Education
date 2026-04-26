@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import LocatorScreen from './src/screens/LocatorScreen';
+import TimelineScreen from './src/screens/TimelineScreen';
 import { theme } from './src/theme';
 
 const Stack = createNativeStackNavigator();
@@ -47,6 +48,11 @@ export default function App() {
             name="Locator" 
             component={LocatorScreen} 
             options={{ title: 'Polling Place Locator' }}
+          />
+          <Stack.Screen 
+            name="Timeline" 
+            component={TimelineScreen} 
+            options={{ title: 'Election Timeline' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

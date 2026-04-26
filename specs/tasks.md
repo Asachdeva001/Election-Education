@@ -18,7 +18,7 @@ Based on `specs/requirements.md` and `specs/design.md`.
 - [x] **Task 9:** Build the responsive, WCAG 2.1 AA compliant frontend shell using React Native for Web/Mobile, prioritizing accessibility features (high contrast, screen-reader support) and simple language (Grade 8 level).
 - [x] **Task 10:** Develop the interactive components: the Eligibility Questionnaire, the localized Step-by-Step Registration Guide, and the Document Checklist UI.
 - [x] **Task 11:** Implement the Polling Place Locator UI, integrating Google Maps for visualization and routing, and clearly defining the different voting methods (In-Person, Mail-in, Early).
-- [ ] **Task 12:** Build the Dynamic Timelines view with personalized calendars, "Add to Google Calendar" functionality, and notification preferences.
+- [x] **Task 12:** Build the Dynamic Timelines view with personalized calendars, "Add to Google Calendar" functionality, and notification preferences.
 
 ## Phase 5: Localization and Polish
 - [ ] **Task 13:** Integrate the Google Cloud Translation API to provide seamless, dynamic multilingual support across the entire frontend application and AI chat responses.
