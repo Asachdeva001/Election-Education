@@ -1,0 +1,21 @@
+{
+  "name": "election-assistant",
+  "version": "1.0.0",
+  "description": "Election Process Education Assistant Monorepo",
+  "private": true,
+  "workspaces": [
+    "app",
+    "server",
+    "ai-bot",
+    "infrastructure"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "husky": "^9.0.11"
+  }
+}
