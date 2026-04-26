@@ -7,7 +7,7 @@ const { CivicApiError } = require('../utils/errors');
  */
 const saveUserPreferences = async (req, res, next) => {
   try {
-    const { deviceId, electionId, notifyMode } = req.body;
+    const { deviceId, electionId, notifyMode, fcmToken } = req.body;
 
     if (!deviceId || !electionId) {
        throw new CivicApiError('Missing required properties: deviceId, electionId', 400);
@@ -23,11 +23,17 @@ const saveUserPreferences = async (req, res, next) => {
     // The collection 'preferences' tracks generic settings indexed by an anonymized device ID
     const docRef = firestore.collection('preferences').doc(String(deviceId));
     
-    await docRef.set({
+    const payload = {
       electionId: String(electionId),
       notifyMode: notifyMode || 'none',
       updatedAt: new Date(),
-    }, { merge: true });
+    };
+    
+    if (fcmToken) {
+        payload.fcmToken = fcmToken;
+    }
+    
+    await docRef.set(payload, { merge: true });
 
     return res.json({ success: true, message: 'Preferences saved securely.' });
   } catch (error) {

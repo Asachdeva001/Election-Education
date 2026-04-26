@@ -1,0 +1,9 @@
+{
+  "displayName": "faq.absentee_voting",
+  "trainingPhrases": [
+    { "parts": [{ "text": "Can I vote if I am an out-of-state college student?" }] },
+    { "parts": [{ "text": "How do I request a mail ballot?" }] },
+    { "parts": [{ "text": "What is the deadline for absentee voting?" }] },
+    { "parts": [{ "text": "Can I mail my ballot from another country?" }] }
+  ]
+}

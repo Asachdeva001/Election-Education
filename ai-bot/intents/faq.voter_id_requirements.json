@@ -1,0 +1,9 @@
+{
+  "displayName": "faq.voter_id_requirements",
+  "trainingPhrases": [
+    { "parts": [{ "text": "Do I need a photo ID to vote?" }] },
+    { "parts": [{ "text": "What forms of ID are accepted?" }] },
+    { "parts": [{ "text": "Can I vote with an expired driver's license?" }] },
+    { "parts": [{ "text": "Do I have to bring identification to the polls?" }] }
+  ]
+}

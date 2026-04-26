@@ -6,6 +6,7 @@ const { initializeDb } = require('./db/postgres');
 
 const civicRoutes = require('./routes/civic.routes');
 const userRoutes = require('./routes/user.routes');
+const fcmRoutes = require('./routes/fcm.routes');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use('/api/civic', civicRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/fcm', fcmRoutes);
 
 // Basic Health Check
 app.get('/health', (req, res) => {

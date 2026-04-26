@@ -1,0 +1,10 @@
+{
+  "displayName": "faq.registration_status",
+  "trainingPhrases": [
+    { "parts": [{ "text": "How do I check if I am registered to vote?" }] },
+    { "parts": [{ "text": "Am I currently registered?" }] },
+    { "parts": [{ "text": "What if I moved recently to a new state?" }] },
+    { "parts": [{ "text": "How do I update my name on my voter registration?" }] },
+    { "parts": [{ "text": "When is the deadline to register for the next election?" }] }
+  ]
+}
