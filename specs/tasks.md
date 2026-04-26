@@ -17,7 +17,7 @@ Based on `specs/requirements.md` and `specs/design.md`.
 ## Phase 4: Frontend Development & UI/UX (React Native/PWA)
 - [x] **Task 9:** Build the responsive, WCAG 2.1 AA compliant frontend shell using React Native for Web/Mobile, prioritizing accessibility features (high contrast, screen-reader support) and simple language (Grade 8 level).
 - [x] **Task 10:** Develop the interactive components: the Eligibility Questionnaire, the localized Step-by-Step Registration Guide, and the Document Checklist UI.
-- [ ] **Task 11:** Implement the Polling Place Locator UI, integrating Google Maps for visualization and routing, and clearly defining the different voting methods (In-Person, Mail-in, Early).
+- [x] **Task 11:** Implement the Polling Place Locator UI, integrating Google Maps for visualization and routing, and clearly defining the different voting methods (In-Person, Mail-in, Early).
 - [ ] **Task 12:** Build the Dynamic Timelines view with personalized calendars, "Add to Google Calendar" functionality, and notification preferences.
 
 ## Phase 5: Localization and Polish

@@ -26,7 +26,7 @@ export default function HomeScreen({ navigation }) {
           title="Find Polling Place"
           accessibilityLabel="Locate where to vote or drop off your ballot"
           variant="secondary"
-          onPress={() => console.log('Navigate to Locator')}
+          onPress={() => navigation.navigate('Locator')}
         />
 
         <AccessibleButton
