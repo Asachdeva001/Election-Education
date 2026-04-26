@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 export const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -46,10 +47,12 @@ export const TranslationProvider = ({ children }) => {
     }
 
     try {
-      // In production, point to backend REST URL
-      // E.g., const res = await fetch('http://localhost:8080/api/translation/bulk' ...)
-      // For cross-platform fallback, we simulate the network lookup
-      const response = await fetch('http://10.0.2.2:8080/api/translation/bulk', {
+      // Determine the correct API URL based on platform/environment
+      const API_BASE_URL = Platform.OS === 'web' 
+        ? '' // Use relative path for web since it's hosted by the backend
+        : (process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8080');
+
+      const response = await fetch(`${API_BASE_URL}/api/translation/bulk`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ texts: [text], targetLanguage: locale })

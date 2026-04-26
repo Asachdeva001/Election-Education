@@ -28,6 +28,17 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Election Server is running.' });
 });
 
+// Serve frontend static files
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Fallback for React Native Web navigation (must be placed before the error handler)
+app.get('*', (req, res, next) => {
+  // If request is for an API route that missed, go to next() to hit the global error handler
+  if (req.path.startsWith('/api/')) return next();
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 // Global Error Handler boundary
 app.use((err, req, res, next) => {
   if (err instanceof CivicApiError) {
