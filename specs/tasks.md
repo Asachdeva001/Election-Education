@@ -14,10 +14,10 @@ Based on `specs/requirements.md` and `specs/design.md`.
 
 ## Phase 3: AI & NLP Integration (Dialogflow/Vertex AI)
 - [x] **Task 7:** Design and configure the conversational AI agent in Dialogflow CX, focusing on intent recognition for the "NLP-Powered FAQ Assistant" and defining conversional flows based on the verified knowledge base.
-- [ ] **Task 8:** Implement a Retrieval-Augmented Generation (RAG) system utilizing Google Vertex AI to ground chatbot responses strictly in official election information and integrate it with the backend orchestration service.
+- [x] **Task 8:** Implement a Retrieval-Augmented Generation (RAG) system utilizing Google Vertex AI to ground chatbot responses strictly in official election information and integrate it with the backend orchestration service.
 
 ## Phase 4: Frontend Development & UI/UX (React Native/PWA)
-- [ ] **Task 9:** Build the responsive, WCAG 2.1 AA compliant frontend shell using React Native for Web/Mobile, prioritizing accessibility features (high contrast, screen-reader support) and simple language (Grade 8 level).
+- [x] **Task 9:** Build the responsive, WCAG 2.1 AA compliant frontend shell using React Native for Web/Mobile, prioritizing accessibility features (high contrast, screen-reader support) and simple language (Grade 8 level).
 - [ ] **Task 10:** Develop the interactive components: the Eligibility Questionnaire, the localized Step-by-Step Registration Guide, and the Document Checklist UI.
 - [ ] **Task 11:** Implement the Polling Place Locator UI, integrating Google Maps for visualization and routing, and clearly defining the different voting methods (In-Person, Mail-in, Early).
 - [ ] **Task 12:** Build the Dynamic Timelines view with personalized calendars, "Add to Google Calendar" functionality, and notification preferences.
