@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import HomeScreen from './src/screens/HomeScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
 import { theme } from './src/theme';
 
 const Stack = createNativeStackNavigator();
@@ -35,6 +36,11 @@ export default function App() {
             name="Home" 
             component={HomeScreen} 
             options={{ title: 'Election Assistant' }}
+          />
+          <Stack.Screen 
+            name="Registration" 
+            component={RegistrationScreen} 
+            options={{ title: 'Register to Vote' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

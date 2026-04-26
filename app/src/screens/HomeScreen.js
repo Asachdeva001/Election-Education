@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }) {
           title="Check Eligibility & Register"
           accessibilityLabel="Start the voter eligibility questionnaire and registration guide"
           variant="primary"
-          onPress={() => console.log('Navigate to Registration')}
+          onPress={() => navigation.navigate('Registration')}
         />
         
         <AccessibleButton
