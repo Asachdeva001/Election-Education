@@ -1,7 +1,20 @@
+/**
+ * @file TranslationContext.js
+ * @description Provides a global React Context for managing application localization.
+ * Handles fetching translations from the backend API, falling back to local mock data,
+ * and caching translations in AsyncStorage to optimize performance.
+ */
+
+// --- Imports ---
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
+// --- Constants ---
+/**
+ * Supported languages in the application.
+ * @constant LANGUAGES
+ */
 export const LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'hi', label: 'Hindi' },
@@ -10,14 +23,27 @@ export const LANGUAGES = [
   { code: 'bn', label: 'Bengali' }
 ];
 
+// --- Context Definition ---
 const TranslationContext = createContext();
 
+// --- Provider Component ---
+/**
+ * Provider for the TranslationContext. Wraps the app to supply translation functionality.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {React.ReactNode} props.children - Child components to provide context to.
+ * @returns {JSX.Element} The Provider component.
+ */
 export const TranslationProvider = ({ children }) => {
+  // --- State ---
   const [locale, setLocale] = useState('en');
   const [cache, setCache] = useState({});
 
+  // --- Side Effects ---
   useEffect(() => {
-    // Restore locale on mount
+    /**
+     * Restores the selected locale and translation cache from local storage on mount.
+     */
     const boot = async () => {
       const savedLocale = await AsyncStorage.getItem('@locale');
       if (savedLocale) setLocale(savedLocale);
@@ -28,6 +54,12 @@ export const TranslationProvider = ({ children }) => {
     boot();
   }, []);
 
+  // --- Helpers ---
+  /**
+   * Updates the application's current language and persists the choice.
+   * 
+   * @param {string} newLocale - The ISO language code to switch to.
+   */
   const changeLanguage = async (newLocale) => {
     setLocale(newLocale);
     await AsyncStorage.setItem('@locale', newLocale);
@@ -35,7 +67,10 @@ export const TranslationProvider = ({ children }) => {
 
   /**
    * The core dynamically evaluating translation hook.
-   * Checks the native device cache first, if it misses, talks to Node Backend.
+   * Checks the native device cache first; if it misses, it talks to the Node Backend.
+   * 
+   * @param {string} text - The original English text to translate.
+   * @returns {Promise<string>} The translated text.
    */
   const translate = async (text) => {
     if (locale === 'en' || !text) return text;
@@ -74,6 +109,7 @@ export const TranslationProvider = ({ children }) => {
     }
   };
 
+  // --- Render ---
   return (
     <TranslationContext.Provider value={{ locale, changeLanguage, translate }}>
       {children}
@@ -81,4 +117,9 @@ export const TranslationProvider = ({ children }) => {
   );
 };
 
+// --- Custom Hooks ---
+/**
+ * Hook to access the TranslationContext.
+ * @returns {Object} { locale, changeLanguage, translate }
+ */
 export const useTranslation = () => useContext(TranslationContext);

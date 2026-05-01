@@ -1,11 +1,31 @@
+/**
+ * @file EligibilityQuestionnaire.js
+ * @description A multi-step questionnaire component that determines 
+ * if a user meets the basic criteria for voter registration.
+ */
+
+// --- Imports ---
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
+
+// Internal Components & Theme
 import { AccessibleText, AccessibleButton } from './AccessibleWrapper';
 import { theme } from '../theme';
 
+// --- Main Component ---
+/**
+ * Renders an interactive questionnaire for voter eligibility.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Function} props.onEligible - Callback triggered when the user passes all checks.
+ * @param {Function} props.onIneligible - Callback triggered when the user fails a check.
+ * @returns {JSX.Element} The EligibilityQuestionnaire component.
+ */
 export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
+  // --- State ---
   const [step, setStep] = useState(0);
 
+  // --- Constants ---
   const questions = [
     {
       id: 'citizenship',
@@ -17,6 +37,12 @@ export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
     }
   ];
 
+  // --- Helpers ---
+  /**
+   * Processes the user's answer and advances to the next step or triggers callbacks.
+   * 
+   * @param {boolean} isYes - True if the user answered 'Yes', otherwise false.
+   */
   const handleAnswer = (isYes) => {
     if (!isYes) {
       onIneligible(questions[step].id);
@@ -30,17 +56,21 @@ export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
     }
   };
 
+  // --- Render ---
   return (
     <ScrollView style={styles.container}>
+      {/* Header */}
       <AccessibleText variant="header" style={styles.header}>
         Eligibility Check
       </AccessibleText>
       
+      {/* Question Card */}
       <View style={styles.card}>
         <AccessibleText variant="title" style={styles.question}>
           {questions[step].text}
         </AccessibleText>
 
+        {/* Answer Buttons */}
         <View style={styles.buttonRow}>
           <View style={styles.btnWrapper}>
             <AccessibleButton
@@ -60,6 +90,8 @@ export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
           </View>
         </View>
       </View>
+
+      {/* Progress Indicator */}
       <AccessibleText variant="body" style={styles.disclaimer}>
         Step {step + 1} of {questions.length}
       </AccessibleText>
@@ -67,6 +99,7 @@ export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,

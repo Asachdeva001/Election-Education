@@ -1,9 +1,22 @@
+/**
+ * @file user.controller.js
+ * @description Controllers for managing user preferences and device configurations
+ * within Firestore, maintaining zero-PII storage.
+ */
+
+// --- Imports ---
 const { getFirestore } = require('../db/firestore');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Controllers ---
+
 /**
- * Controller to save anon/pseudonymized user timeline preferences
- * Proves Firestore connectivity and serves as foundation for Task 6.
+ * Controller to save anon/pseudonymized user timeline preferences.
+ * Proves Firestore connectivity and handles basic device notification configuration.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const saveUserPreferences = async (req, res, next) => {
   try {
@@ -33,6 +46,7 @@ const saveUserPreferences = async (req, res, next) => {
         payload.fcmToken = fcmToken;
     }
     
+    // Use merge to update rather than overwrite the entire document
     await docRef.set(payload, { merge: true });
 
     return res.json({ success: true, message: 'Preferences saved securely.' });
@@ -41,6 +55,7 @@ const saveUserPreferences = async (req, res, next) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   saveUserPreferences,
 };

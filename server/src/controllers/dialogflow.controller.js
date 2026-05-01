@@ -1,9 +1,23 @@
+/**
+ * @file dialogflow.controller.js
+ * @description Controllers for handling webhooks from Dialogflow CX.
+ * Orchestrates Retrieval-Augmented Generation (RAG) using Civic Info and Vertex AI.
+ */
+
+// --- Imports ---
 const { generateGroundedResponse } = require('../services/vertex.service');
 const civicInfoService = require('../services/civicInfo.service');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Controllers ---
+
 /**
  * Handles incoming Fulfillment Webhooks from Dialogflow CX.
+ * Authenticates the request and processes RAG-enabled intents.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const handleWebhook = async (req, res, next) => {
   try {
@@ -20,7 +34,6 @@ const handleWebhook = async (req, res, next) => {
     const parameters = sessionInfo.parameters || {};
 
     const userQuery = dialogflowRequest.text; // The original question
-
     let fulfillmentResponseText = "I encountered an error processing your query.";
 
     // 3. RAG Orchestration based on Tag
@@ -61,6 +74,7 @@ const handleWebhook = async (req, res, next) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   handleWebhook,
 };

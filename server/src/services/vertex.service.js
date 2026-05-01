@@ -1,8 +1,23 @@
+/**
+ * @file vertex.service.js
+ * @description Service for generating grounded AI responses using Google Vertex AI.
+ * Implements strict constraints to answer queries based solely on provided civic context.
+ */
+
+// --- Imports ---
 const { VertexAI } = require('@google-cloud/vertexai');
 
+// --- State ---
 let vertexAI;
 let generativeModel;
 
+// --- Helpers ---
+
+/**
+ * Initializes and retrieves the Gemini generative model.
+ * 
+ * @returns {Object|undefined} The generative model instance or undefined on failure.
+ */
 const getModel = () => {
   if (!generativeModel) {
     try {
@@ -27,12 +42,14 @@ const getModel = () => {
   return generativeModel;
 };
 
+// --- Services ---
+
 /**
  * Executes a Retrieval-Augmented Generation prompt strictly bounded by Civic info context.
  * 
  * @param {string} userQuery - The question the user submitted to Dialogflow.
- * @param {Object} civicContext - The real-time JSON data from getVoterInfo()
- * @returns {Promise<string>} The generated safe response
+ * @param {Object} civicContext - The real-time JSON data from getVoterInfo().
+ * @returns {Promise<string>} The generated safe response.
  */
 const generateGroundedResponse = async (userQuery, civicContext) => {
   const model = getModel();
@@ -70,6 +87,7 @@ const generateGroundedResponse = async (userQuery, civicContext) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   generateGroundedResponse,
 };

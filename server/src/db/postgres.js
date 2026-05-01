@@ -1,8 +1,23 @@
+/**
+ * @file postgres.js
+ * @description Manages the initialization and connection pooling for PostgreSQL.
+ * Handles the `elections_cache` table for caching external API responses.
+ */
+
+// --- Imports ---
 const { Pool } = require('pg');
 
+// --- State ---
 let pool;
 
-// We wrap the pool instantiation in a lazy loader to gracefully handle missing .env files during tests
+// --- Database Operations ---
+
+/**
+ * Initializes and retrieves the PostgreSQL connection pool.
+ * Wraps instantiation in a lazy loader to gracefully handle missing .env files during tests.
+ * 
+ * @returns {Pool} The PostgreSQL connection pool.
+ */
 const getPool = () => {
   if (!pool) {
     if (!process.env.DB_HOST && process.env.NODE_ENV !== 'test') {
@@ -20,7 +35,10 @@ const getPool = () => {
   return pool;
 };
 
-// Initialize the expected caching table
+/**
+ * Initializes the expected caching table (`elections_cache`).
+ * Does not execute if the environment is 'test'.
+ */
 const initializeDb = async () => {
   if (process.env.NODE_ENV === 'test') return;
   const client = await getPool().connect();
@@ -42,6 +60,7 @@ const initializeDb = async () => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   getPool,
   initializeDb,

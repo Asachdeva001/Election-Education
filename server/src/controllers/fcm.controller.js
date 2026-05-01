@@ -1,9 +1,23 @@
+/**
+ * @file fcm.controller.js
+ * @description Controllers for managing Firebase Cloud Messaging (FCM) operations,
+ * including triggering bulk reminders and sending test notifications.
+ */
+
+// --- Imports ---
 const { executeReminders } = require('../workers/reminders');
 const { sendNotification } = require('../services/fcm.service');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Controllers ---
+
 /**
- * Invoked by Google Cloud Scheduler to trigger broad sweeps.
+ * Invoked by Google Cloud Scheduler to trigger broad sweeps for notification reminders.
+ * Authenticates the request via a shared secret header.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const triggerReminders = async (req, res, next) => {
   try {
@@ -21,7 +35,11 @@ const triggerReminders = async (req, res, next) => {
 };
 
 /**
- * Debug manual endpoint.
+ * Debug manual endpoint for sending a single FCM notification.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const testNotification = async (req, res, next) => {
   try {
@@ -35,6 +53,7 @@ const testNotification = async (req, res, next) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   triggerReminders,
   testNotification,

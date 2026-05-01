@@ -1,10 +1,23 @@
+/**
+ * @file civicInfo.service.js
+ * @description Service for interacting with the Google Civic Information API.
+ * Fetches global elections and specific voter info with zero-PII storage compliance.
+ */
+
+// --- Imports ---
 const axios = require('axios');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Constants ---
 const CIVIC_INFO_API_URL = 'https://civicinfo.googleapis.com/civicinfo/v2';
 
+// --- Helpers ---
+
 /**
- * Validates that the API Key is present in the environment.
+ * Validates that the Civic Info API Key is present in the environment.
+ * 
+ * @returns {string} The API key.
+ * @throws {CivicApiError} If the API key is missing.
  */
 const getApiKey = () => {
   const key = process.env.CIVIC_INFO_API_KEY;
@@ -14,9 +27,13 @@ const getApiKey = () => {
   return key;
 };
 
+// --- Services ---
+
 /**
  * Fetches a list of upcoming elections from the Google Civic Information API.
- * @returns {Promise<Array>} List of elections.
+ * 
+ * @returns {Promise<Array>} List of upcoming elections.
+ * @throws {CivicApiError} If the API request fails.
  */
 const getElections = async () => {
   try {
@@ -37,9 +54,12 @@ const getElections = async () => {
 
 /**
  * Fetches voter info including polling locations based on an address.
+ * Zero-PII Compliance: We fetch using the address but do NOT store it.
+ * 
  * @param {string} address - The residential address to query.
- * @param {number} [electionId] - Optional election ID.
+ * @param {number|string} [electionId] - Optional election ID.
  * @returns {Promise<Object>} Polling locations, early voting sites, and contest data.
+ * @throws {CivicApiError} If the API request fails or address is missing.
  */
 const getVoterInfo = async (address, electionId = null) => {
   if (!address) {
@@ -79,6 +99,7 @@ const getVoterInfo = async (address, electionId = null) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   getElections,
   getVoterInfo,

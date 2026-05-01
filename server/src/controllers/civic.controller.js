@@ -1,9 +1,23 @@
+/**
+ * @file civic.controller.js
+ * @description Controllers for interacting with the Google Civic Information API.
+ * Includes caching mechanisms to optimize external API calls.
+ */
+
+// --- Imports ---
 const civicInfoService = require('../services/civicInfo.service');
 const { getPool } = require('../db/postgres');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Controllers ---
+
 /**
- * Controller to fetch global elections using PostgreSQL caching (24 hr expiry limit).
+ * Controller to fetch global elections using PostgreSQL caching.
+ * Caches responses for 24 hours to reduce API load.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const getElections = async (req, res, next) => {
   try {
@@ -25,7 +39,7 @@ const getElections = async (req, res, next) => {
         }
       } catch (dbError) {
         console.error('Postgres Cache Read Error:', dbError.message);
-        // We catch and squelch DB errors so a missing DB connection falls back to the live API
+        // Catch and squelch DB errors so a missing DB connection falls back to the live API
       }
     }
 
@@ -58,7 +72,12 @@ const getElections = async (req, res, next) => {
 
 /**
  * Controller to fetch specific Voter info based on location.
- * ZERO-PII RULE: We never cache `address` or write it anywhere. Passing directly.
+ * ZERO-PII RULE: We never cache `address` or write it anywhere. 
+ * This acts as a strict pass-through for privacy.
+ * 
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
  */
 const getVoterInfo = async (req, res, next) => {
   try {
@@ -77,6 +96,7 @@ const getVoterInfo = async (req, res, next) => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   getElections,
   getVoterInfo,

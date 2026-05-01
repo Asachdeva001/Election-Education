@@ -1,12 +1,26 @@
+/**
+ * @file LocatorScreen.js
+ * @description Provides a map interface to help users locate polling stations,
+ * early voting centers, and mail-in dropboxes based on their current location.
+ */
+
+// --- Imports ---
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+
+// Internal Components & Configuration
 import { AccessibleText } from '../components/AccessibleWrapper';
 import MapMarkerCard from '../components/MapMarkerCard';
 import { theme } from '../theme';
 
-// Mock Polling Stations located in New Delhi, India
+// --- Constants ---
+/**
+ * @constant MOCK_INDIA_STATIONS
+ * @description Mock polling station data for demonstration purposes.
+ * Located in New Delhi, India.
+ */
 const MOCK_INDIA_STATIONS = [
   {
     id: '1',
@@ -31,12 +45,24 @@ const MOCK_INDIA_STATIONS = [
   }
 ];
 
+// --- Main Component ---
+/**
+ * Renders the Locator Screen containing an interactive map.
+ * Requests location permissions and displays nearby polling stations.
+ * 
+ * @returns {JSX.Element} The LocatorScreen component.
+ */
 export default function LocatorScreen() {
+  // --- State ---
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [selectedStation, setSelectedStation] = useState(null);
 
+  // --- Side Effects ---
   useEffect(() => {
+    /**
+     * Asynchronously requests location permissions and fetches the current position.
+     */
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -49,6 +75,8 @@ export default function LocatorScreen() {
     })();
   }, []);
 
+  // --- Helpers ---
+  // Determine the map's visible region based on user location or fallback.
   const mapRegion = location ? {
     latitude: location.latitude,
     longitude: location.longitude,
@@ -62,14 +90,17 @@ export default function LocatorScreen() {
     longitudeDelta: 0.1,
   };
 
+  // --- Render ---
   return (
     <View style={styles.container}>
+      {/* Error Banner */}
       {errorMsg ? (
         <View style={styles.errorBox}>
           <AccessibleText variant="body">{errorMsg}</AccessibleText>
         </View>
       ) : null}
 
+      {/* Interactive Map */}
       <MapView 
          style={styles.map} 
          region={mapRegion}
@@ -90,6 +121,7 @@ export default function LocatorScreen() {
         ))}
       </MapView>
       
+      {/* Selected Station Overlay */}
       <MapMarkerCard 
          station={selectedStation} 
          onClose={() => setSelectedStation(null)} 
@@ -98,6 +130,7 @@ export default function LocatorScreen() {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,

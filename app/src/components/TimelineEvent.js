@@ -1,12 +1,34 @@
+/**
+ * @file TimelineEvent.js
+ * @description Renders an individual event card in the election timeline.
+ * Provides functionality to add the event directly to Google Calendar.
+ */
+
+// --- Imports ---
 import React from 'react';
 import { View, StyleSheet, Linking } from 'react-native';
+
+// Internal Components & Theme
 import { AccessibleText, AccessibleButton } from './AccessibleWrapper';
 import { theme } from '../theme';
 
+// --- Main Component ---
 /**
- * Encodes dynamic date logic to build a web-intent compatible with calendar.google.com
+ * Displays a single timeline event and an "Add to Google Calendar" button.
+ * Encodes dynamic date logic to build a web-intent compatible with calendar.google.com.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Object} props.event - The event object.
+ * @param {string} props.event.title - Event title.
+ * @param {string} props.event.description - Event description.
+ * @param {string} props.event.date - ISO 8601 date string.
+ * @returns {JSX.Element} The TimelineEvent component.
  */
 export default function TimelineEvent({ event }) {
+  // --- Helpers ---
+  /**
+   * Constructs a Google Calendar URL and opens it in the device browser.
+   */
   const handleAddToCalendar = () => {
     // Basic formatting for Google Calendar API
     // Dates must be in YYYYMMDDTHHmmSSZ format
@@ -21,8 +43,10 @@ export default function TimelineEvent({ event }) {
     Linking.openURL(url).catch((err) => console.error('Error opening Google Calendar Link:', err));
   };
 
+  // --- Render ---
   return (
     <View style={styles.card}>
+       {/* Date Column */}
        <View style={styles.dateCol}>
           <AccessibleText variant="title" style={styles.dateNum}>
             {new Date(event.date).getDate()}
@@ -32,9 +56,11 @@ export default function TimelineEvent({ event }) {
           </AccessibleText>
        </View>
 
+       {/* Event Details */}
        <View style={styles.eventInfo}>
           <AccessibleText variant="title" style={styles.title}>{event.title}</AccessibleText>
           <AccessibleText variant="body" style={styles.description}>{event.description}</AccessibleText>
+          
           <View style={styles.buttonWrapper}>
              <AccessibleButton
                 title="Add to Google Calendar"
@@ -48,6 +74,7 @@ export default function TimelineEvent({ event }) {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',

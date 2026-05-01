@@ -1,7 +1,15 @@
+/**
+ * @file AccessibleWrapper.test.js
+ * @description Unit tests for the AccessibleWrapper components.
+ * Verifies accessibility compliance and correct styling logic.
+ */
+
+// --- Imports ---
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { AccessibleButton } from '../src/components/AccessibleWrapper';
 
+// --- Mocks ---
 // Mock the translation context to prevent async network fetching during tests
 jest.mock('../src/context/TranslationContext', () => ({
   useTranslation: () => ({
@@ -10,6 +18,7 @@ jest.mock('../src/context/TranslationContext', () => ({
   })
 }));
 
+// --- Test Suite ---
 describe('AccessibleButton constraints', () => {
     it('forces accessibilityRole to be button', () => {
        const { getByRole } = render(

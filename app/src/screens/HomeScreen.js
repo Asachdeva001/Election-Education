@@ -1,13 +1,35 @@
+/**
+ * @file HomeScreen.js
+ * @description The main landing screen of the Election Assistant application.
+ * Provides navigation to key features and a language selection interface.
+ */
+
+// --- Imports ---
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
+
+// Internal Components & Context
 import { AccessibleText, AccessibleButton } from '../components/AccessibleWrapper';
 import { theme } from '../theme';
 import { useTranslation, LANGUAGES } from '../context/TranslationContext';
 
+// --- Main Component ---
+/**
+ * Renders the Home Screen with introduction text and navigation buttons.
+ * Allows users to change the app language dynamically.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Object} props.navigation - React Navigation object.
+ * @returns {JSX.Element} The HomeScreen component.
+ */
 export default function HomeScreen({ navigation }) {
+  // --- Hooks ---
   const { locale, changeLanguage } = useTranslation();
+
+  // --- Render ---
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Header Section */}
       <AccessibleText variant="header" style={styles.header}>
         Welcome to the Election Education Assistant
       </AccessibleText>
@@ -16,6 +38,7 @@ export default function HomeScreen({ navigation }) {
         We are here to help you understand the election process, check your eligibility, and find your local polling place. Let's get started.
       </AccessibleText>
 
+      {/* Language Selection Grid */}
       <View style={styles.langContainer}>
          {LANGUAGES.map(lang => (
            <AccessibleButton
@@ -28,6 +51,7 @@ export default function HomeScreen({ navigation }) {
          ))}
       </View>
 
+      {/* Primary Navigation Options */}
       <View style={styles.buttonContainer}>
         <AccessibleButton
           title="Check Eligibility & Register"
@@ -61,6 +85,7 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,

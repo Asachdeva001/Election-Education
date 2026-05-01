@@ -1,9 +1,18 @@
+/**
+ * @file civicInfo.service.test.js
+ * @description Unit tests for the Civic Info Service ensuring correct API integration
+ * and zero-PII storage compliance logic.
+ */
+
+// --- Imports ---
 const axios = require('axios');
 const civicInfoService = require('./civicInfo.service');
 const { CivicApiError } = require('../utils/errors');
 
+// --- Mocks ---
 jest.mock('axios');
 
+// --- Test Suite ---
 describe('Civic Information Service', () => {
   const originalEnv = process.env;
 
@@ -16,6 +25,7 @@ describe('Civic Information Service', () => {
     process.env = originalEnv;
   });
 
+  // --- getElections Tests ---
   describe('getElections', () => {
     it('should successfully fetch return elections', async () => {
       const mockData = { elections: [{ id: '2000', name: 'VIP Test Election' }] };
@@ -37,6 +47,7 @@ describe('Civic Information Service', () => {
     });
   });
 
+  // --- getVoterInfo Tests ---
   describe('getVoterInfo', () => {
     const mockAddress = '1263 Pacific Ave. Kansas City KS';
 

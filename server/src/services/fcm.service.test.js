@@ -1,6 +1,14 @@
+/**
+ * @file fcm.service.test.js
+ * @description Unit tests for the Firebase Cloud Messaging service.
+ * Verifies that messages are formatted and dispatched correctly to FCM.
+ */
+
+// --- Imports ---
 const admin = require('firebase-admin');
 const { sendDeadlineReminder } = require('./fcm.service');
 
+// --- Mocks ---
 const mockSend = jest.fn().mockResolvedValue('mock-message-id');
 
 jest.mock('firebase-admin', () => ({
@@ -11,6 +19,7 @@ jest.mock('firebase-admin', () => ({
   }),
 }));
 
+// --- Test Suite ---
 describe('FCM Service', () => {
   it('should format and trigger deadline reminder successfully', async () => {
     const success = await sendDeadlineReminder('fake-token', 'General Election', 3);

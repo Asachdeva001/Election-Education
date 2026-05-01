@@ -1,18 +1,38 @@
+/**
+ * @file DocumentChecklist.js
+ * @description Provides an interactive checklist for users to track which 
+ * registration documents they have gathered. Progress is saved locally.
+ */
+
+// --- Imports ---
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Internal Components & Theme
 import { AccessibleText } from './AccessibleWrapper';
 import { theme } from '../theme';
 
+// --- Main Component ---
+/**
+ * Renders the Document Checklist and manages its state with AsyncStorage.
+ * 
+ * @returns {JSX.Element} The DocumentChecklist component.
+ */
 export default function DocumentChecklist() {
+  // --- State ---
   const [documents, setDocuments] = useState([
     { id: '1', title: 'State Issued Photo ID or Driver\'s License', checked: false },
     { id: '2', title: 'Proof of US Citizenship (Passport, Birth Certificate)', checked: false },
     { id: '3', title: 'Proof of Residence (Utility Bill, Bank Statement)', checked: false },
   ]);
 
+  // --- Side Effects ---
   // Load saved progress on mount
   useEffect(() => {
+    /**
+     * Loads the saved checklist state from AsyncStorage.
+     */
     const loadProgress = async () => {
       try {
         const savedData = await AsyncStorage.getItem('@document_checklist');
@@ -26,7 +46,12 @@ export default function DocumentChecklist() {
     loadProgress();
   }, []);
 
-  // Save progress persistently
+  // --- Helpers ---
+  /**
+   * Toggles the checked state of a document and saves progress persistently.
+   * 
+   * @param {string} id - The unique ID of the document to toggle.
+   */
   const toggleDocument = async (id) => {
     const newDocs = documents.map(doc => 
       doc.id === id ? { ...doc, checked: !doc.checked } : doc
@@ -41,6 +66,7 @@ export default function DocumentChecklist() {
     }
   };
 
+  // --- Render ---
   return (
     <View style={styles.container}>
       <AccessibleText variant="title" style={styles.header}>
@@ -68,6 +94,7 @@ export default function DocumentChecklist() {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surface,
@@ -83,7 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: theme.spacing.sm,
-    minHeight: 48,
+    minHeight: 48, // Touch target minimum size
   },
   box: {
     width: 28,

@@ -1,10 +1,24 @@
+/**
+ * @file TimelineScreen.js
+ * @description Displays a personalized timeline of election deadlines and events.
+ * Also allows the user to configure their push notification preferences.
+ */
+
+// --- Imports ---
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Internal Components & Theme
 import { AccessibleText, AccessibleButton } from '../components/AccessibleWrapper';
 import TimelineEvent from '../components/TimelineEvent';
 import { theme } from '../theme';
 
+// --- Constants ---
+/**
+ * @constant MOCK_EVENTS
+ * @description Mock timeline events relative to the current date for demonstration.
+ */
 const MOCK_EVENTS = [
   {
     id: '1',
@@ -26,11 +40,22 @@ const MOCK_EVENTS = [
   }
 ];
 
+// --- Main Component ---
+/**
+ * Renders the Timeline screen showing upcoming election events.
+ * Provides controls for managing notification settings.
+ * 
+ * @returns {JSX.Element} The TimelineScreen component.
+ */
 export default function TimelineScreen() {
+  // --- State ---
   const [notifyPref, setNotifyPref] = useState('all'); // default to All
 
+  // --- Side Effects ---
   useEffect(() => {
-    // Load local notification preferences
+    /**
+     * Loads the local notification preferences from AsyncStorage on mount.
+     */
     const loadPref = async () => {
        const saved = await AsyncStorage.getItem('@notify_pref');
        if (saved) setNotifyPref(saved);
@@ -38,6 +63,12 @@ export default function TimelineScreen() {
     loadPref();
   }, []);
 
+  // --- Helpers ---
+  /**
+   * Updates and saves the user's notification preference locally and mock-syncs to backend.
+   * 
+   * @param {string} prefValue - The chosen preference ('all', 'deadlines', 'none').
+   */
   const handleSetPreference = async (prefValue) => {
     setNotifyPref(prefValue);
     await AsyncStorage.setItem('@notify_pref', prefValue);
@@ -46,8 +77,10 @@ export default function TimelineScreen() {
     console.log(`Synced to Backend: Preference set to ${prefValue}`);
   };
 
+  // --- Render ---
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Header */}
       <AccessibleText variant="header" style={styles.header}>
         Your Personalized Timeline
       </AccessibleText>
@@ -96,6 +129,7 @@ export default function TimelineScreen() {
   );
 }
 
+// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,

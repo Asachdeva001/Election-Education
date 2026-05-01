@@ -1,7 +1,21 @@
+/**
+ * @file firestore.js
+ * @description Manages the initialization and retrieval of the Google Cloud Firestore client.
+ */
+
+// --- Imports ---
 const { Firestore } = require('@google-cloud/firestore');
 
+// --- State ---
 let firestore = null;
 
+// --- Helpers ---
+/**
+ * Initializes and retrieves the Firestore singleton instance.
+ * Automatically handles authentication locally or in Cloud Run.
+ * 
+ * @returns {Firestore|null} The initialized Firestore client or null if initialization fails.
+ */
 const getFirestore = () => {
   if (!firestore) {
     // When running in Google Cloud Run, it automatically authenticates using the service account assigned.
@@ -22,6 +36,7 @@ const getFirestore = () => {
   return firestore;
 };
 
+// --- Exports ---
 module.exports = {
   getFirestore,
 };

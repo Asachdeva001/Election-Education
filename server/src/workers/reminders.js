@@ -1,9 +1,20 @@
+/**
+ * @file reminders.js
+ * @description Worker functions for executing scheduled background tasks,
+ * specifically targeting user reminder notifications.
+ */
+
+// --- Imports ---
 const { getFirestore } = require('../db/firestore');
 const { sendDeadlineReminder } = require('../services/fcm.service');
+
+// --- Workers ---
 
 /**
  * Iterates through user preferences stored in Firestore, targeting those
  * who opted into notifications and possess an fcmToken.
+ * 
+ * @returns {Promise<Object>} An object containing the count of triggered notifications.
  */
 const executeReminders = async () => {
   const db = getFirestore();
@@ -46,6 +57,7 @@ const executeReminders = async () => {
   }
 };
 
+// --- Exports ---
 module.exports = {
   executeReminders,
 };

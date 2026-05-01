@@ -1,4 +1,14 @@
-// High-Contrast AA Compliant Theme
+/**
+ * @file index.js (Theme)
+ * @description Defines the global design system tokens including colors, typography,
+ * and spacing, ensuring High-Contrast AA compliance.
+ */
+
+// --- Theme Definition ---
+
+/**
+ * High-Contrast AA Compliant Theme
+ */
 export const theme = {
   colors: {
     background: '#0F172A',      // Dark Navy
