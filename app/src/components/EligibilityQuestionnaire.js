@@ -2,11 +2,12 @@
  * @file EligibilityQuestionnaire.js
  * @description A multi-step questionnaire component that determines 
  * if a user meets the basic criteria for voter registration.
+ * Implements active Accessibility Announcements for screen readers.
  */
 
 // --- Imports ---
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, AccessibilityInfo } from 'react-native';
 
 // Internal Components & Theme
 import { AccessibleText, AccessibleButton } from './AccessibleWrapper';
@@ -40,18 +41,24 @@ export default function EligibilityQuestionnaire({ onEligible, onIneligible }) {
   // --- Helpers ---
   /**
    * Processes the user's answer and advances to the next step or triggers callbacks.
+   * Uses AccessibilityInfo to announce changes to visually impaired users dynamically.
    * 
    * @param {boolean} isYes - True if the user answered 'Yes', otherwise false.
    */
   const handleAnswer = (isYes) => {
     if (!isYes) {
+      AccessibilityInfo.announceForAccessibility("You answered No. You are currently ineligible.");
       onIneligible(questions[step].id);
       return;
     }
 
     if (step < questions.length - 1) {
-      setStep(step + 1);
+      const nextStep = step + 1;
+      setStep(nextStep);
+      // Actively announce the next question so screen readers don't wait for focus
+      AccessibilityInfo.announceForAccessibility(`Step ${nextStep + 1}. ${questions[nextStep].text}`);
     } else {
+      AccessibilityInfo.announceForAccessibility("You answered Yes to all questions. You are eligible to register.");
       onEligible();
     }
   };

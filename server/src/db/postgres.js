@@ -2,10 +2,12 @@
  * @file postgres.js
  * @description Manages the initialization and connection pooling for PostgreSQL.
  * Handles the `elections_cache` table for caching external API responses.
+ * Optimized with an index on `expires_at` for efficient cache cleanup.
  */
 
 // --- Imports ---
 const { Pool } = require('pg');
+const logger = require('../utils/logger'); // Centralized GCP Logger
 
 // --- State ---
 let pool;
@@ -21,7 +23,7 @@ let pool;
 const getPool = () => {
   if (!pool) {
     if (!process.env.DB_HOST && process.env.NODE_ENV !== 'test') {
-      console.warn('PostgreSQL DB_HOST missing. Caching will be disabled or mocked.');
+      logger.warn('PostgreSQL DB_HOST missing. Caching will be disabled or mocked.');
     }
     
     pool = new Pool({
@@ -36,7 +38,7 @@ const getPool = () => {
 };
 
 /**
- * Initializes the expected caching table (`elections_cache`).
+ * Initializes the expected caching table (`elections_cache`) and creates indexes.
  * Does not execute if the environment is 'test'.
  */
 const initializeDb = async () => {
@@ -44,6 +46,7 @@ const initializeDb = async () => {
   const client = await getPool().connect();
   try {
     // Stores election API responses. `expires_at` implements the 24-hour expiration policy
+    // Creates an index on expires_at for O(log n) cleanup efficiency
     await client.query(`
       CREATE TABLE IF NOT EXISTS elections_cache (
         id SERIAL PRIMARY KEY,
@@ -51,10 +54,11 @@ const initializeDb = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         expires_at TIMESTAMP NOT NULL
       );
+      CREATE INDEX IF NOT EXISTS idx_expires_at ON elections_cache(expires_at);
     `);
-    console.log('PostgreSQL: elections_cache table initialized or verified.');
+    logger.info('PostgreSQL: elections_cache table and indexes initialized or verified.');
   } catch (error) {
-    console.error('Failed to initialize PostgreSQL structure:', error.message);
+    logger.error('Failed to initialize PostgreSQL structure:', { error: error.message });
   } finally {
     client.release();
   }

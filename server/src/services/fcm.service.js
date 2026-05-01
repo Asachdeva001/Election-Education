@@ -2,10 +2,12 @@
  * @file fcm.service.js
  * @description Service for Firebase Cloud Messaging operations.
  * Handles the initialization of the Firebase Admin SDK and pushing notifications.
+ * Upgraded to support multicast bulk messaging for efficiency.
  */
 
 // --- Imports ---
 const admin = require('firebase-admin');
+const logger = require('../utils/logger'); // Centralized GCP Logger
 
 // --- State ---
 let fcmInitialized = false;
@@ -25,7 +27,7 @@ const initFCM = () => {
       }
       fcmInitialized = true;
     } catch (e) {
-      console.warn('FCM App failed to initialize. Push notifications will be disabled locally.');
+      logger.warn('FCM App failed to initialize. Push notifications will be disabled locally.');
     }
   }
 };
@@ -53,11 +55,43 @@ const sendNotification = async (token, title, body, data = {}) => {
 
   try {
     const response = await admin.messaging().send(payload);
-    console.log(`Successfully sent message: ${response}`);
+    logger.info(`Successfully sent message: ${response}`);
     return true;
   } catch (error) {
-    console.error('Error sending message:', error.message);
+    logger.error('Error sending message:', { error: error.message });
     return false;
+  }
+};
+
+/**
+ * Sends a batch of notifications efficiently using multicast.
+ * 
+ * @param {Array<string>} tokens - Array of FCM device registration tokens.
+ * @param {string} title - The notification title.
+ * @param {string} body - The notification body text.
+ * @param {Object} [data={}] - Additional custom data payload.
+ * @returns {Promise<number>} Number of successfully sent messages.
+ */
+const sendMulticast = async (tokens, title, body, data = {}) => {
+  initFCM();
+  if (!fcmInitialized || !tokens || tokens.length === 0) return 0;
+
+  const payload = {
+    notification: { title, body },
+    data,
+    tokens, // Array of tokens (max 500 per call)
+  };
+
+  try {
+    const response = await admin.messaging().sendEachForMulticast(payload);
+    logger.info(`Successfully sent ${response.successCount} messages via multicast.`);
+    if (response.failureCount > 0) {
+      logger.warn(`${response.failureCount} multicast messages failed.`);
+    }
+    return response.successCount;
+  } catch (error) {
+    logger.error('Error sending multicast message:', { error: error.message });
+    return 0;
   }
 };
 
@@ -84,5 +118,6 @@ const sendDeadlineReminder = async (token, electionName, daysLeft) => {
 // --- Exports ---
 module.exports = {
   sendNotification,
+  sendMulticast,
   sendDeadlineReminder,
 };

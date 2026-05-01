@@ -2,10 +2,11 @@
  * @file DocumentChecklist.js
  * @description Provides an interactive checklist for users to track which 
  * registration documents they have gathered. Progress is saved locally.
+ * Optimized with React.memo and useCallback for performance efficiency.
  */
 
 // --- Imports ---
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,7 +14,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AccessibleText } from './AccessibleWrapper';
 import { theme } from '../theme';
 
+// --- Subcomponents ---
+
+/**
+ * Renders an individual checklist item.
+ * Memoized to prevent unnecessary re-renders when other items in the list change.
+ */
+const ChecklistItem = memo(({ doc, onToggle }) => (
+  <TouchableOpacity
+    style={styles.checkItem}
+    onPress={() => onToggle(doc.id)}
+    accessibilityRole="checkbox"
+    accessibilityState={{ checked: doc.checked }}
+    accessibilityLabel={doc.title}
+  >
+    <View style={[styles.box, doc.checked && styles.boxChecked]}>
+       {doc.checked && <AccessibleText style={styles.checkMark}>✓</AccessibleText>}
+    </View>
+    <AccessibleText variant="body" style={[styles.text, doc.checked && styles.textChecked]}>
+      {doc.title}
+    </AccessibleText>
+  </TouchableOpacity>
+));
+
 // --- Main Component ---
+
 /**
  * Renders the Document Checklist and manages its state with AsyncStorage.
  * 
@@ -49,22 +74,23 @@ export default function DocumentChecklist() {
   // --- Helpers ---
   /**
    * Toggles the checked state of a document and saves progress persistently.
+   * Wrapped in useCallback to maintain reference equality for the memoized child.
    * 
    * @param {string} id - The unique ID of the document to toggle.
    */
-  const toggleDocument = async (id) => {
-    const newDocs = documents.map(doc => 
-      doc.id === id ? { ...doc, checked: !doc.checked } : doc
-    );
-    
-    setDocuments(newDocs);
-
-    try {
-      await AsyncStorage.setItem('@document_checklist', JSON.stringify(newDocs));
-    } catch (e) {
-       console.error('Failed to save checklist.', e);
-    }
-  };
+  const toggleDocument = useCallback(async (id) => {
+    setDocuments(prevDocs => {
+      const newDocs = prevDocs.map(doc => 
+        doc.id === id ? { ...doc, checked: !doc.checked } : doc
+      );
+      
+      // Fire-and-forget save
+      AsyncStorage.setItem('@document_checklist', JSON.stringify(newDocs))
+        .catch(e => console.error('Failed to save checklist.', e));
+        
+      return newDocs;
+    });
+  }, []);
 
   // --- Render ---
   return (
@@ -74,21 +100,11 @@ export default function DocumentChecklist() {
       </AccessibleText>
 
       {documents.map((doc) => (
-        <TouchableOpacity
-          key={doc.id}
-          style={styles.checkItem}
-          onPress={() => toggleDocument(doc.id)}
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: doc.checked }}
-          accessibilityLabel={doc.title}
-        >
-          <View style={[styles.box, doc.checked && styles.boxChecked]}>
-             {doc.checked && <AccessibleText style={styles.checkMark}>✓</AccessibleText>}
-          </View>
-          <AccessibleText variant="body" style={[styles.text, doc.checked && styles.textChecked]}>
-            {doc.title}
-          </AccessibleText>
-        </TouchableOpacity>
+        <ChecklistItem 
+          key={doc.id} 
+          doc={doc} 
+          onToggle={toggleDocument} 
+        />
       ))}
     </View>
   );
